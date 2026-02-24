@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mi Luz, Mi Fe</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at bottom, #0d0e15 0%, #020204 100%);
+      font-family: 'Quicksand', sans-serif;
+      overflow: hidden;
+      color: #fff;
+      display: flex; justify-content: center; align-items: center;
+      transition: background 4s ease-in-out;
+      cursor: pointer;
+    }
+
+    body.dawn {
+      background: radial-gradient(ellipse at bottom, #4a2a1a 0%, #1e1324 40%, #0a0a14 100%);
+    }
+
+    /* ESTRELLAS */
+    .stars { position: absolute; inset: 0; z-index: 0; pointer-events: none; transition: opacity 4s ease; }
+    .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle infinite alternate; }
+    @keyframes twinkle { 0% { opacity: 0.1; } 100% { opacity: 0.9; box-shadow: 0 0 6px #fff; } }
+    .stars.fade-out { opacity: 0.2; }
+
+    /* === LAS 3 VELAS === */
+    .candles-container {
+      position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 35px; align-items: flex-end; z-index: 5;
+    }
+
+    .candle {
+      width: 20px; height: 50px;
+      background: linear-gradient(to right, #ddd, #fff, #bbb);
+      border-radius: 3px 3px 0 0;
+      box-shadow: inset -5px 0 10px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.5);
+      position: relative;
+      opacity: 0; 
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+    .candle.show { opacity: 1; transform: translateY(0); }
+
+    .candle::before {
+      content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+      width: 2px; height: 5px; background: #333;
+    }
+
+    .flame {
+      position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+      width: 12px; height: 26px;
+      background: radial-gradient(ellipse at center, #fff 0%, #ffeb3b 30%, #ff9800 70%, transparent 100%);
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 15px #ff9800, 0 0 30px #ffeb3b;
+      opacity: 0; filter: blur(1px);
+    }
+    .candle.lit .flame { opacity: 1; animation: flicker 0.15s infinite alternate; }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+      100% { transform: translateX(-50%) scale(1.05) rotate(2deg); opacity: 1; }
+    }
+
+    /* === LA CRUZ DE LUZ MÁGICA === */
+    .cross-container {
+      position: absolute; top: 25%; left: 50%; transform: translate(-50%, -50%);
+      width: 200px; height: 300px;
+      display: flex; justify-content: center; align-items: center;
+      opacity: 0; z-index: 10;
+      transition: opacity 3s ease 1s; 
+    }
+    .cross-container.show { opacity: 1; }
+
+    .cross-vert {
+      position: absolute; width: 5px; height: 100%;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 0 15px #fff, 0 0 30px #f4d068, 0 0 60px #f4d068;
+      transform: scaleY(0); transition: transform 3s ease 2s;
+    }
+    .cross-horiz {
+      position: absolute; top: 30%; width: 65%; height: 5px;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 0 15px #fff, 0 0 30px #f4d068, 0 0 60px #f4d068;
+      transform: scaleX(0); transition: transform 3s ease 3.5s;
+    }
+    .cross-container.show .cross-vert { transform: scaleY(1); }
+    .cross-container.show .cross-horiz { transform: scaleX(1); }
+
+    .rays {
+      position: absolute; width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(255,235,150,0.15) 0%, transparent 60%);
+      opacity: 0; transition: opacity 3s ease 5s;
+      animation: rotateRays 15s linear infinite;
+    }
+    .cross-container.show .rays { opacity: 1; }
+    @keyframes rotateRays { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
+
+    /* === EL VERSÍCULO Y MENSAJE === */
+    .message-container {
+      position: absolute; 
+      top: 52%; /* Más arriba para que no choque con las velas */
+      left: 50%; transform: translateX(-50%);
+      width: 90%; max-width: 450px; text-align: center; z-index: 20;
+    }
+
+    .bible-verse {
+      font-family: 'Cinzel', serif; font-size: 18px; line-height: 1.5;
+      color: #f4d068; text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+      opacity: 0; transform: translateY(15px); transition: all 2s ease 6s;
+    }
+    .verse-ref {
+      font-size: 13px; color: #fff; letter-spacing: 2px; margin-top: 10px; opacity: 0.9;
+    }
+
+    .love-note {
+      font-family: 'Dancing Script', cursive; font-size: 28px;
+      color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+      margin-top: 25px;
+      opacity: 0; transform: translateY(15px); transition: all 2s ease 8s;
+    }
+
+    body.dawn .bible-verse { opacity: 1; transform: translateY(0); }
+    body.dawn .love-note { opacity: 1; transform: translateY(0); }
+
+    /* === UI DE INSTRUCCIONES === */
+    .hint {
+      position: fixed; bottom: 35px; width: 100%; text-align: center;
+      color: rgba(255, 255, 255, 0.6); font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+      pointer-events: none; animation: pulse 2s infinite; z-index: 50; transition: opacity 0.5s ease;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+    /* === AJUSTE INTELIGENTE PARA CELULARES === */
+    @media (max-width: 600px) {
+      .cross-container {
+        top: 22%; /* Sube la cruz */
+        transform: translate(-50%, -50%) scale(0.65); /* La hace más pequeña */
+      }
+      .message-container {
+        top: 48%; /* Centra el texto en el espacio libre */
+      }
+      .bible-verse { font-size: 16px; }
+      .love-note { font-size: 24px; margin-top: 20px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+
+  <!-- Las 3 Velas en el suelo -->
+  <div class="candles-container">
+    <div class="candle" id="c1"><div class="flame"></div></div>
+    <div class="candle" id="c2"><div class="flame"></div></div>
+    <div class="candle" id="c3"><div class="flame"></div></div>
+  </div>
+
+  <!-- La Cruz de Luz -->
+  <div class="cross-container" id="cross">
+    <div class="rays"></div>
+    <div class="cross-vert"></div>
+    <div class="cross-horiz"></div>
+  </div>
+
+  <!-- Mensajes (Textos completamente legibles) -->
+  <div class="message-container">
+    <!-- PON AQUÍ TU VERSÍCULO -->
+    <div class="bible-verse">
+      "El amor es paciente, es bondadoso. Todo lo disculpa, todo lo cree, todo lo espera, todo lo soporta. El amor jamás se extingue."
+      <div class="verse-ref">— 1 Corintios 13:4-8 —</div>
+    </div>
+    
+    <!-- PON AQUÍ TU MENSAJE -->
+    <div class="love-note">
+      Gracias por ser la respuesta a mis oraciones, Tami. Te amo. 🐻❤️
+    </div>
+  </div>
+
+  <!-- Este texto se eliminará por completo en el clic 3 -->
+  <div class="hint" id="hint">Enciende una vela (Toca la pantalla)</div>
+
+  <audio id="bgm" src="assets/audio/cancion.mp3" loop></audio>
+
+  <script>
+    const starsEl = document.getElementById('stars');
+    for(let i=0; i<100; i++){
+      let s = document.createElement('div'); s.className = 'star';
+      s.style.width = (Math.random()*2+0.5) + 'px'; s.style.height = s.style.width;
+      s.style.left = Math.random()*100 + 'vw'; s.style.top = Math.random()*100 + 'vh';
+      s.style.animationDuration = (Math.random()*3+2) + 's'; starsEl.appendChild(s);
+    }
+
+    const bgm = document.getElementById('bgm');
+    const hint = document.getElementById('hint');
+    const candles = [document.getElementById('c1'), document.getElementById('c2'), document.getElementById('c3')];
+    let step = 0;
+
+    function shootSpark(startX, startY) {
+      const spark = document.createElement('div');
+      spark.style.position = 'absolute'; spark.style.width = '4px'; spark.style.height = '4px';
+      spark.style.background = '#fff'; spark.style.borderRadius = '50%';
+      spark.style.boxShadow = '0 0 10px #fff, 0 0 20px #f4d068'; spark.style.zIndex = '20';
+      spark.style.left = startX + 'px'; spark.style.top = startY + 'px';
+      document.body.appendChild(spark);
+
+      const crossRect = document.getElementById('cross').getBoundingClientRect();
+      const destX = crossRect.left + crossRect.width/2;
+      const destY = crossRect.top + crossRect.height/2;
+
+      spark.animate([
+        { transform: 'translate(0,0) scale(1)', opacity: 1 },
+        { transform: `translate(${destX - startX}px, ${destY - startY}px) scale(0)`, opacity: 0 }
+      ], { duration: 2500, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' }).onfinish = () => spark.remove();
+    }
+
+    document.body.addEventListener('click', () => {
+      // Muestra las velas
+      if(step === 0) candles.forEach(c => c.classList.add('show'));
+
+      if(step < 3) {
+        if(step === 0) { bgm.volume = 0.3; bgm.play().catch(e=>{}); }
+        
+        candles[step].classList.add('lit');
+        
+        if(step === 0) hint.innerText = "Una más...";
+        if(step === 1) hint.innerText = "La última luz...";
+        
+        step++;
+
+        if(step === 3) {
+          // BORRADO ABSOLUTO DEL TEXTO DE AYUDA PARA QUE NO ESTORBE
+          hint.style.display = 'none';
+          hint.remove(); 
+          
+          setTimeout(() => {
+            document.body.classList.add('dawn');
+            starsEl.classList.add('fade-out');
+
+            candles.forEach(c => {
+              const rect = c.getBoundingClientRect();
+              shootSpark(rect.left + rect.width/2, rect.top);
+            });
+
+            setTimeout(() => { document.getElementById('cross').classList.add('show'); }, 1000);
+          }, 1000);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
